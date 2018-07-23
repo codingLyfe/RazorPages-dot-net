@@ -1,0 +1,87 @@
+﻿@page
+<!-- at-page makes the file into an MVC action
+    It can now handle requests.
+    This must be the first directive on the page -->
+<!-- Moded directive specifies the type of the model passed to the razor page -->
+
+
+@model RazorPagesMovie.Pages.Movies.IndexModel
+
+<!-- Transitionnig back into C# code -->
+<!-- ViewData dictionary can be used to add data that you want to pass to a View. Add objects using key/value pattern.
+    Here Title is added as Index and is used in Pages/Shared/_Layout.cshtml -->
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<!-- input form for searching movies -->
+<form>
+    <p>
+        <select asp-for="MovieGenre" asp-items="Model.Genres">
+            <option value="">All</option>
+        </select>
+
+        Title <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!-- Display name inspects the 'Title' property referenced in the lambda expression to determine display name
+                These are inspected, not evaluated....there is no violation when model, model.Movie, or model.Movie[0] are 'null' or empty -->
+                @Html.DisplayNameFor(model => model.Movie[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie[0].ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie[0].Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.Movie[0].Rating)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Movie)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <!-- asp-page generates a href html tag on runtime, asp-route-id grabs each itmes id in order to access them correctly -->
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
